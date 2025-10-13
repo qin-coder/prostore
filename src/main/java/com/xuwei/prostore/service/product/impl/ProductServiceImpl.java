@@ -1,15 +1,20 @@
 package com.xuwei.prostore.service.product.impl;
 
+import com.xuwei.prostore.dto.ImageDto;
+import com.xuwei.prostore.dto.ProductDto;
 import com.xuwei.prostore.exception.ProductNotFoundException;
 import com.xuwei.prostore.exception.ResourceNotFoundException;
 import com.xuwei.prostore.model.Category;
+import com.xuwei.prostore.model.Image;
 import com.xuwei.prostore.model.Product;
 import com.xuwei.prostore.repository.CategoryRepository;
+import com.xuwei.prostore.repository.ImageRepository;
 import com.xuwei.prostore.repository.ProductRepository;
 import com.xuwei.prostore.request.AddProductRequest;
 import com.xuwei.prostore.request.ProductUpdateRequest;
 import com.xuwei.prostore.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +25,8 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Product addProduct(AddProductRequest product) {
@@ -127,5 +134,21 @@ public class ProductServiceImpl implements ProductService {
     public Long countProductsByBrandAndName(String brand,
                                             String name) {
         return productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product) {
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .toList();
+        productDto.setImages(imageDtos);
+        return productDto;
     }
 }

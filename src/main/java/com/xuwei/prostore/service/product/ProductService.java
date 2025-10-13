@@ -1,5 +1,6 @@
 package com.xuwei.prostore.service.product;
 
+import com.xuwei.prostore.dto.ProductDto;
 import com.xuwei.prostore.model.Product;
 import com.xuwei.prostore.request.AddProductRequest;
 import com.xuwei.prostore.request.ProductUpdateRequest;
@@ -19,4 +20,8 @@ public interface ProductService {
     List<Product> getProductsByBrandAndName(String category, String name);
     Long countProductsByBrandAndName(String brand, String name);
 
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }
