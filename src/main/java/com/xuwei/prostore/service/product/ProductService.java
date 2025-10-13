@@ -4,6 +4,7 @@ import com.xuwei.prostore.dto.ProductDto;
 import com.xuwei.prostore.model.Product;
 import com.xuwei.prostore.request.AddProductRequest;
 import com.xuwei.prostore.request.ProductUpdateRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,4 +25,7 @@ public interface ProductService {
     List<ProductDto> getConvertedProducts(List<Product> products);
 
     ProductDto convertToDto(Product product);
+
+    Page<ProductDto> getAllProductsPaged(int page, int size);
+
 }

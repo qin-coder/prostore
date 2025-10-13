@@ -15,6 +15,9 @@ import com.xuwei.prostore.request.ProductUpdateRequest;
 import com.xuwei.prostore.service.product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -151,4 +154,13 @@ public class ProductServiceImpl implements ProductService {
         productDto.setImages(imageDtos);
         return productDto;
     }
+
+    @Override
+    public Page<ProductDto> getAllProductsPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        return productPage.map(this::convertToDto);
+    }
+
 }

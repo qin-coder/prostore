@@ -117,7 +117,7 @@
             }
         }
 
-        @GetMapping("/products/{name}")
+        @GetMapping("/productName/{name}")
         public ResponseEntity<ApiResponse> getProductByName(@PathVariable String name) {
             try {
                 List<Product> products =
@@ -152,7 +152,7 @@
             }
         }
 
-        @GetMapping("/product/{category}")
+        @GetMapping("/product/category/{category}")
         public ResponseEntity<ApiResponse> findProductByCategory(@PathVariable String category) {
             try {
                 List<Product> products =
@@ -182,6 +182,19 @@
                         , null));
             }
         }
+        @GetMapping("/paged")
+        public ResponseEntity<ApiResponse> getAllProductsPaged(
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "10") int size) {
+            try {
+                var pagedProducts = productService.getAllProductsPaged(page, size);
+                return ResponseEntity.ok(new ApiResponse("success", pagedProducts));
+            } catch (Exception e) {
+                return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                        .body(new ApiResponse(e.getMessage(), null));
+            }
+        }
+
 
 
     }
