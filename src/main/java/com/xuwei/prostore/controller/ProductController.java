@@ -31,7 +31,7 @@
                     convertedProducts));
         }
 
-        @GetMapping("product/{productId}/product")
+        @GetMapping("product/{productId}")
         public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
             try {
                 Product product =
@@ -58,7 +58,7 @@
             }
         }
 
-        @PutMapping("/product/{productId}/update")
+        @PutMapping("/product/update/{productId}")
         public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request, @PathVariable Long productId) {
             try {
                 Product theProduct =
@@ -72,7 +72,7 @@
             }
         }
 
-        @DeleteMapping("/product/{productId}/delete")
+        @DeleteMapping("/product/delete/{productId}")
         public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
             try {
                 productService.deleteProductById(productId);
@@ -117,7 +117,7 @@
             }
         }
 
-        @GetMapping("/products/{name}/products")
+        @GetMapping("/products/{name}")
         public ResponseEntity<ApiResponse> getProductByName(@PathVariable String name) {
             try {
                 List<Product> products =
@@ -152,7 +152,7 @@
             }
         }
 
-        @GetMapping("/product/{category}/all/products")
+        @GetMapping("/product/{category}")
         public ResponseEntity<ApiResponse> findProductByCategory(@PathVariable String category) {
             try {
                 List<Product> products =

@@ -56,7 +56,7 @@ public class ImageController {
                 .body(resource);
     }
 
-    @PutMapping(value = "/image/{imageId}/update", consumes =
+    @PutMapping(value = "/image/update/{imageId}", consumes =
             MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestParam("file") MultipartFile file) {
         try {
@@ -73,7 +73,7 @@ public class ImageController {
     }
 
 
-    @DeleteMapping("/image/{imageId}/delete")
+    @DeleteMapping("/image/delete/{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {
             Image image = imageService.getImageById(imageId);
