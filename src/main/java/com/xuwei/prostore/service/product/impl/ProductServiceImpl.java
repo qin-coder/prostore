@@ -1,5 +1,6 @@
 package com.xuwei.prostore.service.product.impl;
 
+import com.xuwei.prostore.dto.CategoryDto;
 import com.xuwei.prostore.dto.ImageDto;
 import com.xuwei.prostore.dto.ProductDto;
 import com.xuwei.prostore.exception.ProductNotFoundException;
@@ -147,13 +148,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto convertToDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
+
+        CategoryDto categoryDto = modelMapper.map(product.getCategory(), CategoryDto.class);
+        productDto.setCategory(categoryDto);
+
         List<Image> images = imageRepository.findByProductId(product.getId());
         List<ImageDto> imageDtos = images.stream()
                 .map(image -> modelMapper.map(image, ImageDto.class))
                 .toList();
         productDto.setImages(imageDtos);
+
         return productDto;
     }
+
 
     @Override
     public Page<ProductDto> getAllProductsPaged(int page, int size) {

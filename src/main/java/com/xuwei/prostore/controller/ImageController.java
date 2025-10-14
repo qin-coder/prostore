@@ -58,7 +58,7 @@ public class ImageController {
 
     @PutMapping(value = "/image/update/{imageId}", consumes =
             MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestParam("files") MultipartFile file) {
         try {
             Image image = imageService.getImageById(imageId);
             if (image != null) {

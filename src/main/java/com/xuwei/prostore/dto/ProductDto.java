@@ -1,8 +1,6 @@
 package com.xuwei.prostore.dto;
 
-import com.xuwei.prostore.model.Category;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -14,6 +12,7 @@ public class ProductDto {
     private BigDecimal price;
     private int inventory;
     private String description;
-    private Category category;
+
+    private CategoryDto category;
     private List<ImageDto> images;
 }
