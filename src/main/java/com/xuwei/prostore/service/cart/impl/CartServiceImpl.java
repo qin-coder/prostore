@@ -23,39 +23,33 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDto getCart(Long id) {
         Cart cart = cartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + id));
         return cartMapper.toDto(cart);
     }
 
     @Transactional
     @Override
-    public void clearCart(Long id) {
+    public CartDto clearCart(Long id) {
         Cart cart = cartRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found with id: " + id));
 
         cartItemRepository.deleteAllByCartId(id);
-
-        if (cart.getItems() != null) {
-            cart.getItems().clear();
-        }
-
+        cart.getItems().clear();
         cart.setTotalAmount(BigDecimal.ZERO);
 
-        cartRepository.save(cart);
+        Cart savedCart = cartRepository.save(cart);
+        return cartMapper.toDto(savedCart);
     }
 
     @Override
     public BigDecimal getTotalPrice(Long id) {
-        Cart cart = cartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
-        return cart.getTotalAmount();
+        return getCart(id).getTotalAmount();
     }
 
     @Override
-    public Long initializeNewCart() {
+    public CartDto initializeNewCart() {
         Cart newCart = new Cart();
         Cart savedCart = cartRepository.save(newCart);
-        return savedCart.getId();
+        return cartMapper.toDto(savedCart);
     }
-
 }
