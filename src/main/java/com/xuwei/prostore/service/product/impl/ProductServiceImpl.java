@@ -148,18 +148,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto convertToDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
-
-        CategoryDto categoryDto = modelMapper.map(product.getCategory(), CategoryDto.class);
-        productDto.setCategory(categoryDto);
+        if (product.getCategory() != null) {
+            CategoryDto categoryDto = modelMapper.map(product.getCategory(), CategoryDto.class);
+            productDto.setCategory(categoryDto);
+        }
 
         List<Image> images = imageRepository.findByProductId(product.getId());
-        List<ImageDto> imageDtos = images.stream()
-                .map(image -> modelMapper.map(image, ImageDto.class))
-                .toList();
-        productDto.setImages(imageDtos);
-
+        if (images != null && !images.isEmpty()) {
+            List<ImageDto> imageDtos = images.stream()
+                    .map(image -> modelMapper.map(image, ImageDto.class))
+                    .toList();
+            productDto.setImages(imageDtos);
+        }
         return productDto;
     }
+
 
 
     @Override
