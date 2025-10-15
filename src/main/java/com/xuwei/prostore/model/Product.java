@@ -21,6 +21,10 @@ public class Product {
     private String description;
     private BigDecimal price;
     private int inventory;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;

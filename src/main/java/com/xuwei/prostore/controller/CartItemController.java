@@ -20,20 +20,29 @@ public class CartItemController {
     private final CartService cartService;
 
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
-                                                     @RequestParam Long productId,
-                                                     @RequestParam Integer quantity) {
+    public ResponseEntity<ApiResponse> addItemToCart(
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long cartId,
+            @RequestParam Long productId,
+            @RequestParam Integer quantity) {
         try {
             if (cartId == null) {
-                CartDto newCart = cartService.initializeNewCart();
-                cartId = newCart.getCartId();
+                CartDto existingCart = cartService.getCartByUserId(userId);
+                if (existingCart == null) {
+                    existingCart = cartService.initializeNewCart(userId);
+                }
+                cartId = existingCart.getCartId();
             }
+
             CartDto updatedCart = cartItemService.addItemToCart(cartId, productId, quantity);
+
             return ResponseEntity.ok(new ApiResponse("Add Item Success", updatedCart));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+
 
     @DeleteMapping("/remove/cart/{cartId}/item/{itemId}")
     public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId,

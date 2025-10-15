@@ -50,12 +50,13 @@ public class CartController {
     }
 
     @PostMapping("/initialize")
-    public ResponseEntity<ApiResponse> initializeNewCart() {
+    public ResponseEntity<ApiResponse> initializeNewCart(@RequestParam Long userId) {
         try {
-            CartDto newCart = cartService.initializeNewCart();
+            CartDto newCart = cartService.initializeNewCart(userId);
             return ResponseEntity.ok(new ApiResponse("Cart initialized successfully", newCart));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
 }
