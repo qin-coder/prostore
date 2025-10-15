@@ -53,19 +53,7 @@
 
 ---
 
-## ⚙️ Setup Instructions
 
-1. Clone the repository and open in **VS Code** (frontend) and **IDEA** (backend).  
-2. **Backend Setup**:
-   - Create database and tables first
-   - Update database credentials in `application.yml`  
-3. **Frontend Setup**:
-   - Create Vue 3 project scaffold  
-   - Import frontend code  
-   - Install dependencies: `npm install`  
-   - Start dev server: `npm run dev`  
-
----
 
 
 ## 📁 Frontend Structure
