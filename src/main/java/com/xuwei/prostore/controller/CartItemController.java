@@ -2,15 +2,20 @@ package com.xuwei.prostore.controller;
 
 import com.xuwei.prostore.dto.CartDto;
 import com.xuwei.prostore.dto.CartItemDto;
+import com.xuwei.prostore.dto.UserDto;
 import com.xuwei.prostore.exception.ResourceNotFoundException;
+import com.xuwei.prostore.model.User;
 import com.xuwei.prostore.response.ApiResponse;
 import com.xuwei.prostore.service.cart.CartService;
 import com.xuwei.prostore.service.cartItem.CartItemService;
+import com.xuwei.prostore.service.user.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,6 +23,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController {
     private final CartItemService cartItemService;
     private final CartService cartService;
+    private final UserService userService;
 
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addItemToCart(
@@ -33,12 +39,15 @@ public class CartItemController {
                 }
                 cartId = existingCart.getCartId();
             }
+            User user = userService.getAuthenticatedUser();
 
             CartDto updatedCart = cartItemService.addItemToCart(cartId, productId, quantity);
 
             return ResponseEntity.ok(new ApiResponse("Add Item Success", updatedCart));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }catch (JwtException e){
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
